@@ -5,11 +5,10 @@ class Tablero:
   def __init__(self, casillas):
     self.celdas = []
     self.casillas = casillas
-
-  def crearTablero(self):
     for x in range(1,self.casillas + 1):
       for y in range(1,self.casillas + 1):
         self.celdas.append(Celda(x,y))
+    
 
   def getCeldas(self):
     return self.celdas
@@ -21,4 +20,12 @@ class Tablero:
 
   def dispararPunto(self,x,y):
       self.getCelda(x,y).barco.matarBarco()
-      
+      self.getCelda(x,y).color = " M "
+
+  def dibujarTablero(self):
+    dibujo = ""
+    for y in range (1,self.casillas + 1):
+      for x in range (1,self.casillas + 1):
+        dibujo += self.getCelda(x,y).color
+      dibujo += "\n"
+    return dibujo
