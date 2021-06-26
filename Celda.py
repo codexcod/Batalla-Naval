@@ -5,6 +5,7 @@ class Celda:
     self.y = y
     self.color = " · "
     self.ocupado = False
+    self.oculto= True
     self.barco = None
 
   def agregarBarco(self, barco):
