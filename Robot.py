@@ -56,7 +56,7 @@ Comienza el juego!
 puntosJugador = 0
 puntosRobot = 0
 
-while not puntosRobot == numBarcos or puntosJugador == numBarcos:
+while not puntosRobot == numBarcos or not puntosJugador == numBarcos:
     print("¿Donde vas a disparar?")
     x = int(input("x: "))
     while x > casillas or x < 1:

@@ -20,6 +20,34 @@ class Tablero:
     for i in range(len(self.celdas)):
       if self.celdas[i].x == x and self.celdas[i].y == y:
         return self.celdas[i]
+      
+      
+
+  def agregarBuque(self,x,y,orientacion,largo):
+    if orientacion:
+      if not self.getCelda(x,y + largo).isnull() or not self.getCelda(x,y - largo).isnull():
+        self.getCelda(x,y).agregarBarco(Barco())
+        for i in range(1, largo + 1):
+          self.getCelda(x,y + i).agregarBarco(Barco())
+          self.getCelda(x,y - i).agregarBarco(Barco())
+        
+        return True
+      
+      return False
+
+    else:
+      if not self.getCelda(x + largo,y).isnull() or not self.getCelda(x - largo,y).isnull():
+        self.getCelda(x,y).agregarBarco(Barco())
+        for i in range(1, largo + 1):
+          self.getCelda(x - i,y).agregarBarco(Barco())
+          self.getCelda(x + i,y).agregarBarco(Barco())
+        
+        return True
+  
+      return False 
+
+
+
 
   def dispararPunto(self,x,y):
     if x <= self.casillas or y <= self.casillas:
