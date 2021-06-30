@@ -18,12 +18,12 @@ class Tablero:
   
   def getCelda(self,x,y):
     for i in range(len(self.celdas)):
-      if(self.celdas[i].x == x and self.celdas[i].y == y):
+      if self.celdas[i].x == x and self.celdas[i].y == y:
         return self.celdas[i]
 
   def dispararPunto(self,x,y):
-    if(x < self.casillas or y < self.casillas):
-      if(self.getCelda(x,y).ocupado):
+    if x <= self.casillas or y <= self.casillas:
+      if self.getCelda(x,y).ocupado:
         self.getCelda(x,y).barco.matarBarco()
         self.getCelda(x,y).color = " M "
         self.getCelda(x,y).oculto = False
