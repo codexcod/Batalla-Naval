@@ -80,4 +80,14 @@ class Tablero:
       if(not celda.ocupado):
         celda.agregarBarco(Barco())
         celda.ocupado = True
-      
+
+  def dispararAleatorio(self):
+    x = random.randrange(1, self.casillas + 1)
+    y = random.randrange(1, self.casillas + 1)
+    celda = self.getCelda(x, y)
+    while not celda.oculto:
+      x = random.randrange(1, self.casillas + 1)
+      y = random.randrange(1, self.casillas + 1)
+      celda = self.getCelda(x, y)
+
+    return self.dispararPunto(x,y)
