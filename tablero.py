@@ -1,5 +1,6 @@
 from Celda import Celda
 from Barco import Barco
+from Buque import Buque
 import string
 import random
 
@@ -17,34 +18,42 @@ class Tablero:
     return self.celdas
   
   def getCelda(self,x,y):
-    for i in range(len(self.celdas)):
-      if self.celdas[i].x == x and self.celdas[i].y == y:
-        return self.celdas[i]
+    for i in self.celdas:
+      if i.x == x and i.y == y:
+        return i
       
       
 
-  def agregarBuque(self,x,y,orientacion,largo):
-    if orientacion:
-      if not self.getCelda(x,y + largo).isnull() or not self.getCelda(x,y - largo).isnull():
-        self.getCelda(x,y).agregarBarco(Barco())
-        for i in range(1, largo + 1):
-          self.getCelda(x,y + i).agregarBarco(Barco())
-          self.getCelda(x,y - i).agregarBarco(Barco())
-        
+  def agregarBuque(self,buque):
+    if buque.orientacion:
+      if self.getCelda(buque.x,buque.y + buque.largo) is None or self.getCelda(buque.x,buque.y - buque.largo) is None:
+        return False
+
+      else:
+        self.getCelda(buque.x, buque.y).agregarBarco(Barco())
+        for i in range(1, buque.largo + 1):
+          self.getCelda(buque.x, buque.y + i).agregarBarco(Barco())
+          self.getCelda(buque.x, buque.y + i).ocupado = True
+          self.getCelda(buque.x, buque.y - i).agregarBarco(Barco())
+          self.getCelda(buque.x, buque.y - i).ocupado = True
+
         return True
-      
-      return False
+
 
     else:
-      if not self.getCelda(x + largo,y).isnull() or not self.getCelda(x - largo,y).isnull():
-        self.getCelda(x,y).agregarBarco(Barco())
-        for i in range(1, largo + 1):
-          self.getCelda(x - i,y).agregarBarco(Barco())
-          self.getCelda(x + i,y).agregarBarco(Barco())
-        
+      if self.getCelda(buque.x + buque.largo,buque.y) is None or self.getCelda(buque.x - buque.largo,buque.y) is None:
+        return False
+
+      else:
+        self.getCelda(buque.x, buque.y).agregarBarco(Barco())
+        for i in range(1, buque.largo + 1):
+          self.getCelda(buque.x - i, buque.y).agregarBarco(Barco())
+          self.getCelda(buque.x - i, buque.y).ocupado = True
+          self.getCelda(buque.x + i, buque.y).agregarBarco(Barco())
+          self.getCelda(buque.x + i, buque.y).ocupado = True
+
         return True
-  
-      return False 
+
 
 
 
@@ -108,6 +117,13 @@ class Tablero:
       if(not celda.ocupado):
         celda.agregarBarco(Barco())
         celda.ocupado = True
+
+  def cargarBuques(self,cantidadBarcos):
+    for i in range(cantidadBarcos):
+      buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), False,1))
+      while (buque):
+        buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), False,1))
+
 
   def dispararAleatorio(self):
     x = random.randrange(1, self.casillas + 1)
