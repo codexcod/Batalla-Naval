@@ -6,10 +6,9 @@ import random
 
 tablero = Tablero(int(input("Ingrese el numero de casillas: ")))
 
+tablero.cargarBuques(10)
 
-
-print(tablero.agregarBuque(Buque(1,1,True,1)))
-print(tablero.agregarBuque(Buque(1,1,False,1)))
+print(tablero.mostrarTablero())
 
 
 

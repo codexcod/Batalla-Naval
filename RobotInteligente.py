@@ -40,8 +40,24 @@ for i in range(1,numBarcos + 1):
         print("Fuera de rango")
         y = int(input("x: "))
 
+    orientacion = input("indique la orientacion(V/H)")
+    while not tableroJugador.agregarBuque(Buque(x,y,orientacion == "v" or orientacion =="V",1)):
+        print(chr(27) + "[1;31m" + "¡Ya hay un barco ocupando esos espacios!")
+        print(chr(27) + "[37m" + "")
+        print(f"Barco numero {i}")
+        x = int(input("x: "))
+        while x > casillas or x < 1:
+            print("Fuera de rango")
+            x = int(input("x: "))
 
-    tableroJugador.agregarBuque(Buque(x,y,True,1))
+        y = int(input("y: "))
+
+        while y > casillas or y < 1:
+            print("Fuera de rango")
+            y = int(input("x: "))
+
+        orientacion = input("indique la orientacion(V/H)")
+
     print(tableroJugador.mostrarTablero())
 
 tableroRobot.cargarBuques(numBarcos)
@@ -70,6 +86,19 @@ while puntosRobot != numBarcos * 3 and puntosJugador != numBarcos * 3:
         print("Fuera de rango")
         y = int(input("x: "))
 
+    while not tableroRobot.getCelda(x,y).oculto:
+        print(chr(27) + "[1;31m" + "¡Ya disparaste a ese punto!")
+        print(chr(27) + "[37m" + "")
+        print("¿Donde vas a disparar?")
+        x = int(input("x: "))
+        while x > casillas or x < 1:
+            print("Fuera de rango")
+            x = int(input("x: "))
+
+        y = int(input("y: "))
+        while y > casillas or y < 1:
+            print("Fuera de rango")
+            y = int(input("x: "))
 
     if tableroJugador.dispararAleatorio():
         print(tableroJugador.mostrarTablero())

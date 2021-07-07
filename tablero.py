@@ -30,28 +30,35 @@ class Tablero:
         return False
 
       else:
-        self.getCelda(buque.x, buque.y).agregarBarco(Barco())
         for i in range(1, buque.largo + 1):
-          self.getCelda(buque.x, buque.y + i).agregarBarco(Barco())
-          self.getCelda(buque.x, buque.y + i).ocupado = True
-          self.getCelda(buque.x, buque.y - i).agregarBarco(Barco())
-          self.getCelda(buque.x, buque.y - i).ocupado = True
+          if self.getCelda(buque.x, buque.y + i).ocupado or self.getCelda(buque.x, buque.y - i).ocupado:
+            return False
 
-        return True
+          else:
+            self.getCelda(buque.x, buque.y + i).agregarBarco(Barco())
+            self.getCelda(buque.x, buque.y + i).ocupado = True
+            self.getCelda(buque.x, buque.y - i).agregarBarco(Barco())
+            self.getCelda(buque.x, buque.y - i).ocupado = True
 
+          self.getCelda(buque.x, buque.y).agregarBarco(Barco())
+          return True
 
     else:
       if self.getCelda(buque.x + buque.largo,buque.y) is None or self.getCelda(buque.x - buque.largo,buque.y) is None:
         return False
 
       else:
-        self.getCelda(buque.x, buque.y).agregarBarco(Barco())
-        for i in range(1, buque.largo + 1):
-          self.getCelda(buque.x - i, buque.y).agregarBarco(Barco())
-          self.getCelda(buque.x - i, buque.y).ocupado = True
-          self.getCelda(buque.x + i, buque.y).agregarBarco(Barco())
-          self.getCelda(buque.x + i, buque.y).ocupado = True
 
+        for i in range(1, buque.largo + 1):
+          if self.getCelda(buque.x - i, buque.y).ocupado or self.getCelda(buque.x + i, buque.y).ocupado:
+            return False
+          else:
+            self.getCelda(buque.x - i, buque.y).agregarBarco(Barco())
+            self.getCelda(buque.x - i, buque.y).ocupado = True
+            self.getCelda(buque.x + i, buque.y).agregarBarco(Barco())
+            self.getCelda(buque.x + i, buque.y).ocupado = True
+
+        self.getCelda(buque.x, buque.y).agregarBarco(Barco())
         return True
 
 
@@ -121,7 +128,7 @@ class Tablero:
   def cargarBuques(self,cantidadBarcos):
     for i in range(cantidadBarcos):
       buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), False,1))
-      while (buque):
+      while (not buque):
         buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), False,1))
 
 
