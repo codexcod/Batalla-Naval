@@ -182,7 +182,6 @@ class Robot:
 
 
             posibilidades = self.calcularPosibilidades(celda,tablero)
-            print(f"{celda.x}  {celda.y} {posibilidades}")
             if posibilidades > max:
                 max = posibilidades
                 mejorPosibilidad = i
