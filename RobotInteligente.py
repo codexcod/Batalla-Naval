@@ -2,6 +2,7 @@ from tablero import Tablero
 from Celda import Celda
 from Barco import Barco
 from Buque import Buque
+from Inteligencia import Robot
 import random
 
 
@@ -18,6 +19,7 @@ while numBarcos > casillas * casillas - (casillas) or numBarcos < 1:
 
 tableroJugador = Tablero(casillas)
 tableroRobot = Tablero(casillas)
+robot = Robot(casillas,numBarcos)
 
 print(f"""
 
@@ -100,7 +102,7 @@ while puntosRobot != numBarcos * 3 and puntosJugador != numBarcos * 3:
             print("Fuera de rango")
             y = int(input("x: "))
 
-    if tableroJugador.dispararAleatorio():
+    if robot.disparar(tableroJugador):
         print(tableroJugador.mostrarTablero())
         print(chr(27)+"[1;31m"+"""
 Encontraron uno de tus  barcos!
