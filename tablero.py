@@ -26,7 +26,7 @@ class Tablero:
 
   def agregarBuque(self,buque):
     if buque.orientacion:
-      if self.getCelda(buque.x,buque.y + buque.largo) is None or self.getCelda(buque.x,buque.y - buque.largo) is None:
+      if self.getCelda(buque.x,buque.y + buque.largo) is None or self.getCelda(buque.x,buque.y - buque.largo) is None or self.getCelda(buque.x,buque.y).ocupado:
         return False
 
       else:
@@ -127,9 +127,9 @@ class Tablero:
 
   def cargarBuques(self,cantidadBarcos):
     for i in range(cantidadBarcos):
-      buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), False,1))
+      buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), bool(random.randrange(0,2)),1))
       while (not buque):
-        buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), False,1))
+        buque = self.agregarBuque(Buque(random.randrange(1, self.casillas + 1), random.randrange(1, self.casillas + 1), bool(random.randrange(0,2)),1))
 
 
   def dispararAleatorio(self):
