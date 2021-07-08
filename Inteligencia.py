@@ -97,34 +97,31 @@ class Robot:
                 tablero.dispararPunto(self.aseguradas[len(self.aseguradas) - 1].x,self.aseguradas[len(self.aseguradas) - 1 ].y)
                 if len(self.aseguradas) == 1:
                     self.limpiarMira()
+                else:
+                    self.aseguradas.remove(self.aseguradas[len(self.aseguradas) - 1])
 
-                self.aseguradas.remove(self.aseguradas[len(self.aseguradas) - 1])
+
                 return True
 
         else:
-            x = random.randrange(1, self.casillas + 1)
-            y = random.randrange(1, self.casillas + 1)
-            celda = tablero.getCelda(x, y)
-            while not celda.oculto:
-                x = random.randrange(1, self.casillas + 1)
-                y = random.randrange(1, self.casillas + 1)
-                celda = tablero.getCelda(x, y)
 
-            if tablero.dispararPunto(x,y):
+            celda = self.buscarBarcos(tablero)
+
+            if tablero.dispararPunto(celda.x,celda.y):
                 self.barcoEnMira = True
                 self.mira = celda
 
-                if self.chequearCelda(x,y + 1,tablero):
-                    self.posibilidades.append(Celda(x,y+1))
+                if self.chequearCelda(celda.x,celda.y + 1,tablero):
+                    self.posibilidades.append(Celda(celda.x,celda.y+1))
 
-                if self.chequearCelda(x+ 1,y,tablero):
-                    self.posibilidades.append(Celda(x+1,y))
+                if self.chequearCelda(celda.x+ 1,celda.y,tablero):
+                    self.posibilidades.append(Celda(celda.x+1,celda.y))
 
-                if self.chequearCelda(x, y - 1,tablero):
-                    self.posibilidades.append(Celda(x,y-1))
+                if self.chequearCelda(celda.x, celda.y - 1,tablero):
+                    self.posibilidades.append(Celda(celda.x,celda.y-1))
 
-                if self.chequearCelda(x- 1, y,tablero):
-                    self.posibilidades.append(Celda(x-1,y))
+                if self.chequearCelda(celda.x- 1, celda.y,tablero):
+                    self.posibilidades.append(Celda(celda.x-1,celda.y))
 
                 return True
 
@@ -146,6 +143,53 @@ class Robot:
         self.posibilidades.clear()
         self.microPosibilidades.clear()
         self.aseguradas.clear()
+
+    def calcularPosibilidades(self,celda,tablero):
+        posibilidades = 0
+        if self.chequearCelda(celda.x + 1,celda.y,tablero) and self.chequearCelda(celda.x + 2,celda.y,tablero):
+            posibilidades += 1
+
+        if self.chequearCelda(celda.x + 1,celda.y,tablero) and self.chequearCelda(celda.x - 1,celda.y,tablero):
+            posibilidades += 1
+
+        if self.chequearCelda(celda.x - 1,celda.y,tablero) and self.chequearCelda(celda.x - 2,celda.y,tablero):
+            posibilidades += 1
+
+        if self.chequearCelda(celda.x,celda.y + 1,tablero) and self.chequearCelda(celda.x,celda.y + 2,tablero):
+            posibilidades += 1
+
+        if self.chequearCelda(celda.x,celda.y + 1,tablero) and self.chequearCelda(celda.x,celda.y - 1,tablero):
+            posibilidades += 1
+
+        if self.chequearCelda(celda.x,celda.y - 1,tablero) and self.chequearCelda(celda.x,celda.y - 2,tablero):
+            posibilidades += 1
+
+        return posibilidades
+
+
+    def buscarBarcos(self,tablero):
+        posiblesCeldas = []
+        max = 0
+        mejorPosibilidad = 0
+        for i in range(0,5):
+            x = random.randrange(1, self.casillas + 1)
+            y = random.randrange(1, self.casillas + 1)
+            celda = tablero.getCelda(x, y)
+            while not celda.oculto:
+                x = random.randrange(1, self.casillas + 1)
+                y = random.randrange(1, self.casillas + 1)
+                celda = tablero.getCelda(x, y)
+
+
+            posibilidades = self.calcularPosibilidades(celda,tablero)
+            print(f"{celda.x}  {celda.y} {posibilidades}")
+            if posibilidades > max:
+                max = posibilidades
+                mejorPosibilidad = i
+
+            posiblesCeldas.append(celda)
+
+        return posiblesCeldas[mejorPosibilidad]
 
 
 
