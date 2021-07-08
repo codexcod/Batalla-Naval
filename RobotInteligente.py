@@ -19,7 +19,7 @@ while numBarcos > casillas * casillas - (casillas) or numBarcos < 1:
 
 tableroJugador = Tablero(casillas)
 tableroRobot = Tablero(casillas)
-robot = Robot(casillas,numBarcos)
+robot = Robot(casillas)
 
 print(f"""
 

@@ -4,10 +4,8 @@ import random
 
 class Robot:
 
-    def __init__(self,casillas,numBarcos):
+    def __init__(self,casillas):
         self.casillas = casillas
-        self.numBarcos = numBarcos
-        self.tablero = Tablero(casillas)
         self.barcoEnMira = False
         self.mira = None
         self.posibilidades=[]
