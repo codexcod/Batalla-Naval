@@ -85,9 +85,7 @@ class Robot:
                 else:
                     aleatorio = random.randrange(0,len(self.microPosibilidades))
                     if tablero.dispararPunto(self.microPosibilidades[aleatorio].x,self.microPosibilidades[aleatorio].y):
-                        self.barcoEnMira= False
-                        self.mira = None
-                        self.microPosibilidades.clear()
+                        self.limpiarMira()
                         return True
                     else:
                         self.microPosibilidades.remove(self.microPosibilidades[aleatorio])
@@ -98,8 +96,7 @@ class Robot:
             else:
                 tablero.dispararPunto(self.aseguradas[len(self.aseguradas) - 1].x,self.aseguradas[len(self.aseguradas) - 1 ].y)
                 if len(self.aseguradas) == 1:
-                    self.barcoEnMira = False
-                    self.mira = None
+                    self.limpiarMira()
 
                 self.aseguradas.remove(self.aseguradas[len(self.aseguradas) - 1])
                 return True
@@ -142,6 +139,13 @@ class Robot:
             return False
 
         return False
+
+    def limpiarMira(self):
+        self.mira = None
+        self.barcoEnMira = False
+        self.posibilidades.clear()
+        self.microPosibilidades.clear()
+        self.aseguradas.clear()
 
 
 
