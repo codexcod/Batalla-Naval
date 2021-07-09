@@ -36,7 +36,7 @@ class Robot:
                                     self.microPosibilidades.append(Celda(self.mira.x - diferencia, self.mira.y))
 
 
-                                if self.chequearCelda(self.mira.x - diferencia * 2, self.mira.y,tablero):
+                                if self.chequearCelda(self.mira.x + diferencia * 2, self.mira.y,tablero):
                                     self.microPosibilidades.append(Celda(self.mira.x + diferencia * 2, self.mira.y))
 
                             return True
@@ -61,7 +61,7 @@ class Robot:
                                 self.posibilidades.clear()
                                 if self.chequearCelda(self.mira.x - diferencia, self.mira.y,tablero):
                                     self.microPosibilidades.append(Celda(self.mira.x - diferencia, self.mira.y))
-                                if self.chequearCelda(self.mira.x - diferencia * 2, self.mira.y,tablero):
+                                if self.chequearCelda(self.mira.x + diferencia * 2, self.mira.y,tablero):
                                     self.microPosibilidades.append(Celda(self.mira.x + diferencia * 2, self.mira.y))
 
                             return True
@@ -79,6 +79,22 @@ class Robot:
                                 self.aseguradas.append(Celda(self.mira.x + diferencia * 2,self.mira.y))
 
                             return False
+
+                    elif len(self.posibilidades) == 1:
+                        disparo = tablero.dispararPunto(self.posibilidades[0].x, self.posibilidades[0].y)
+                        if self.mira.x == self.posibilidades[0].x:
+                            diferencia = self.posibilidades[0].y - self.mira.y
+                            self.posibilidades.clear()
+                            self.aseguradas.append(Celda(self.mira.x, self.mira.y + diferencia * 2))
+
+                        else:
+                            diferencia = self.posibilidades[0].x - self.mira.x
+                            self.posibilidades.clear()
+                            self.aseguradas.append(Celda(self.mira.x + diferencia * 2, self.mira.y))
+
+                        return disparo
+
+
 
                 else:
                     aleatorio = random.randrange(0,len(self.microPosibilidades))
@@ -110,16 +126,20 @@ class Robot:
                 self.mira = celda
 
                 if self.chequearCelda(celda.x,celda.y + 1,tablero):
-                    self.posibilidades.append(Celda(celda.x,celda.y+1))
+                    if self.chequearCelda(celda.x,celda.y - 1,tablero) or self.chequearCelda(celda.x,celda.y + 2,tablero):
+                        self.posibilidades.append(Celda(celda.x,celda.y+1))
 
                 if self.chequearCelda(celda.x+ 1,celda.y,tablero):
-                    self.posibilidades.append(Celda(celda.x+1,celda.y))
+                    if self.chequearCelda(celda.x - 1,celda.y,tablero) or self.chequearCelda(celda.x + 2,celda.y,tablero):
+                        self.posibilidades.append(Celda(celda.x+1,celda.y))
 
                 if self.chequearCelda(celda.x, celda.y - 1,tablero):
-                    self.posibilidades.append(Celda(celda.x,celda.y-1))
+                    if self.chequearCelda(celda.x, celda.y + 1,tablero) or self.chequearCelda(celda.x, celda.y - 2,tablero):
+                        self.posibilidades.append(Celda(celda.x,celda.y-1))
 
                 if self.chequearCelda(celda.x- 1, celda.y,tablero):
-                    self.posibilidades.append(Celda(celda.x-1,celda.y))
+                    if self.chequearCelda(celda.x + 1, celda.y,tablero) or self.chequearCelda(celda.x - 2, celda.y,tablero):
+                        self.posibilidades.append(Celda(celda.x-1,celda.y))
 
                 return True
 
