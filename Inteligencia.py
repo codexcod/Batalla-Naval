@@ -52,6 +52,7 @@ class Robot:
 
                         else:
                             self.posibilidades.remove(self.posibilidades[aleatorio])
+                            self.pensarPosibilidades(self.mira,tablero)
                             return False
 
                     elif len(self.posibilidades) == 2:
@@ -173,6 +174,7 @@ class Robot:
 
 
     def pensarPosibilidades(self,celda,tablero):
+        self.posibilidades.clear()
         if self.chequearCelda(celda.x, celda.y + 1, tablero):
             if self.chequearCelda(celda.x, celda.y - 1, tablero) or self.chequearCelda(celda.x, celda.y + 2, tablero):
                 self.posibilidades.append(Celda(celda.x, celda.y + 1))
