@@ -22,6 +22,11 @@ class Robot:
             self.posibilidadesSecundarias.clear()
 
         if self.barcoEnMira:
+            print(f"""
+aseguradas : {len(self.aseguradas)}
+posibilidades : {len(self.posibilidades)}
+micro: {len(self.microPosibilidades)}
+secon : {len(self.posibilidadesSecundarias)}""")
             if len(self.aseguradas) == 0:
                 if  len(self.microPosibilidades) == 0:
                     if len(self.posibilidades) == 4 or len(self.posibilidades) == 3:
@@ -58,6 +63,9 @@ class Robot:
                     elif len(self.posibilidades) == 2:
                         aleatorio =random.randrange(0,2)
                         if tablero.dispararPunto(self.posibilidades[aleatorio].x,self.posibilidades[aleatorio].y):
+                            if self.posibildadSecundaria == None:
+                                self.posibildadSecundaria = self.posibilidades[aleatorio]
+
                             if self.mira.x ==  self.posibilidades[aleatorio].x:
                                 diferencia = self.posibilidades[aleatorio].y - self.mira.y
                                 self.posibilidades.clear()
@@ -109,8 +117,16 @@ class Robot:
                 else:
                     aleatorio = random.randrange(0,len(self.microPosibilidades))
                     if tablero.dispararPunto(self.microPosibilidades[aleatorio].x,self.microPosibilidades[aleatorio].y):
-                        self.limpiarMira()
+                        if tablero.buques[tablero.getCelda(self.microPosibilidades[aleatorio].x,self.microPosibilidades[aleatorio].y).barco.numBuque].estaVivo():
+                            self.pensarPosibilidades(self.mira,tablero)
+                            self.microPosibilidades.clear()
+                            self.posibilidadesSecundarias.append(self.posibildadSecundaria)
+
+                        else:
+                            self.limpiarMira()
+
                         return True
+
                     else:
                         if len(self.microPosibilidades) > 1:
                             self.microPosibilidades.remove(self.microPosibilidades[aleatorio])
@@ -127,18 +143,27 @@ class Robot:
                 disparo = tablero.dispararPunto(self.aseguradas[len(self.aseguradas) - 1].x,self.aseguradas[len(self.aseguradas) - 1 ].y)
                 if len(self.aseguradas) == 1:
                     if disparo:
-                        self.limpiarMira()
+                        if tablero.buques[tablero.getCelda(self.aseguradas[len(self.aseguradas) - 1].x,self.aseguradas[len(self.aseguradas) - 1].y).barco.numBuque].estaVivo():
+                            self.pensarPosibilidades(self.mira,tablero)
+                            self.aseguradas.clear()
+                            self.posibilidadesSecundarias.append(self.posibildadSecundaria)
+
+                        else:
+                            self.limpiarMira()
+                            return True
+
                     else:
                         self.pensarPosibilidades(self.mira, tablero)
                         self.aseguradas.clear()
                         self.posibilidadesSecundarias.append(self.posibildadSecundaria)
+                        return False
 
                 else:
                     self.aseguradas.remove(self.aseguradas[len(self.aseguradas) - 1])
 
 
 
-                return True
+
 
         else:
                 celda = self.buscarBarcos(tablero)
@@ -190,6 +215,43 @@ class Robot:
         if self.chequearCelda(celda.x - 1, celda.y, tablero):
             if self.chequearCelda(celda.x + 1, celda.y, tablero) or self.chequearCelda(celda.x - 2, celda.y, tablero):
                 self.posibilidades.append(Celda(celda.x - 1, celda.y))
+
+        if tablero.buques[tablero.getCelda(celda.x,celda.y).barco.numBuque].estaVivo():
+            if not tablero.getCelda(celda.x + 1, celda.y) is None:
+                if not tablero.getCelda(celda.x + 1,celda.y).barco is None:
+                    if tablero.getCelda(celda.x + 1,celda.y).barco.numBuque == tablero.getCelda(celda.x,celda.y).barco.numBuque and tablero.getCelda(celda.x + 1,celda.y).barco.estado == False:
+                        if self.chequearCelda(celda.x + 2,celda.y,tablero):
+                            self.microPosibilidades.append(Celda(celda.x + 2,celda.y))
+
+                        if self.chequearCelda(celda.x - 1,celda.y,tablero):
+                            self.microPosibilidades.append(Celda(celda.x - 1,celda.y))
+
+            if not tablero.getCelda(celda.x - 1, celda.y) is None:
+                if not tablero.getCelda(celda.x - 1,celda.y).barco is None:
+                    if tablero.getCelda(celda.x - 1,celda.y).barco.numBuque == tablero.getCelda(celda.x,celda.y).barco.numBuque and tablero.getCelda(celda.x - 1,celda.y).barco.estado == False:
+                        if self.chequearCelda(celda.x - 2, celda.y, tablero):
+                            self.microPosibilidades.append(Celda(celda.x - 2, celda.y))
+
+                        if self.chequearCelda(celda.x + 1, celda.y, tablero):
+                            self.microPosibilidades.append(Celda(celda.x + 1, celda.y))
+
+            if not tablero.getCelda(celda.x, celda.y + 1) is None:
+                if not tablero.getCelda(celda.x,celda.y + 1).barco is None:
+                    if tablero.getCelda(celda.x,celda.y + 1).barco.numBuque == tablero.getCelda(celda.x,celda.y).barco.numBuque and tablero.getCelda(celda.x,celda.y + 1).barco.estado == False:
+                        if self.chequearCelda(celda.x, celda.y + 2, tablero):
+                            self.microPosibilidades.append(Celda(celda.x, celda.y + 2))
+
+                        if self.chequearCelda(celda.x, celda.y - 1, tablero):
+                            self.microPosibilidades.append(Celda(celda.x, celda.y - 1))
+
+            if not tablero.getCelda(celda.x,celda.y - 1) is None:
+                if not tablero.getCelda(celda.x,celda.y - 1).barco is None:
+                    if tablero.getCelda(celda.x,celda.y - 1).barco.numBuque == tablero.getCelda(celda.x,celda.y).barco.numBuque and tablero.getCelda(celda.x,celda.y - 1).barco.estado == False:
+                        if self.chequearCelda(celda.x, celda.y - 2, tablero):
+                            self.microPosibilidades.append(Celda(celda.x, celda.y - 2))
+
+                        if self.chequearCelda(celda.x, celda.y + 1, tablero):
+                            self.microPosibilidades.append(Celda(celda.x, celda.y + 1))
 
 
     def calcularPosibilidades(self,celda,tablero):
