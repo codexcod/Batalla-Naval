@@ -8,10 +8,13 @@ import random
 tablero = Tablero(int(input("Ingrese el numero de casillas: ")))
 
 tablero.agregarBuque(Buque(5,5,False,1))
-tablero.agregarBuque(Buque(2,4,True,1))
-tablero.agregarBuque(Buque(6,2,True,1))
-tablero.agregarBuque(Buque(1,6,False,1))
-tablero.agregarBuque(Buque(6,6,False,1))
+tablero.agregarBuque(Buque(5,4,False,1))
+tablero.agregarBuque(Buque(2,1,False,1))
+tablero.agregarBuque(Buque(5,6,False,1))
+
+
+
+
 
 robot = Robot(tablero.casillas)
 print(tablero.mostrarTablero())
@@ -21,6 +24,10 @@ print(tablero.mostrarTablero())
 while 4 == 4:
     esperar = input("esperar: ")
     robot.disparar(tablero)
+    print(tablero.buques[tablero.getCelda(6, 5).barco.numBuque].estaVivo())
+    print(tablero.buques[tablero.getCelda(5, 4).barco.numBuque].estaVivo())
+    print(tablero.buques[tablero.getCelda(2, 1).barco.numBuque].estaVivo())
+    print(tablero.buques[tablero.getCelda(5, 6).barco.numBuque].estaVivo())
     print(tablero.mostrarTablero())
 
 

@@ -9,6 +9,7 @@ class Tablero:
   def __init__(self, casillas):
     self.celdas = []
     self.casillas = casillas
+    self.buques = []
     for x in range(1,self.casillas + 1):
       for y in range(1,self.casillas + 1):
         self.celdas.append(Celda(x,y))
@@ -35,13 +36,23 @@ class Tablero:
             return False
 
           else:
-            self.getCelda(buque.x, buque.y + i).agregarBarco(Barco())
+            barco = Barco()
+            barco.setNumBuque(len(self.buques))
+            buque.agregarBarco(barco)
+            self.getCelda(buque.x, buque.y + i).agregarBarco(barco)
             self.getCelda(buque.x, buque.y + i).ocupado = True
-            self.getCelda(buque.x, buque.y - i).agregarBarco(Barco())
+            barco = Barco()
+            barco.setNumBuque(len(self.buques))
+            buque.agregarBarco(barco)
+            self.getCelda(buque.x, buque.y - i).agregarBarco(barco)
             self.getCelda(buque.x, buque.y - i).ocupado = True
 
-          self.getCelda(buque.x, buque.y).agregarBarco(Barco())
-          return True
+        barco = Barco()
+        barco.setNumBuque(len(self.buques))
+        buque.agregarBarco(barco)
+        self.getCelda(buque.x, buque.y).agregarBarco(barco)
+        self.buques.append(buque)
+        return True
 
     else:
       if self.getCelda(buque.x + buque.largo,buque.y) is None or self.getCelda(buque.x - buque.largo,buque.y) is None:
@@ -53,12 +64,22 @@ class Tablero:
           if self.getCelda(buque.x - i, buque.y).ocupado or self.getCelda(buque.x + i, buque.y).ocupado:
             return False
           else:
-            self.getCelda(buque.x - i, buque.y).agregarBarco(Barco())
+            barco = Barco()
+            barco.setNumBuque(len(self.buques))
+            buque.agregarBarco(barco)
+            self.getCelda(buque.x - i, buque.y).agregarBarco(barco)
             self.getCelda(buque.x - i, buque.y).ocupado = True
-            self.getCelda(buque.x + i, buque.y).agregarBarco(Barco())
+            barco = Barco()
+            barco.setNumBuque(len(self.buques))
+            buque.agregarBarco(barco)
+            self.getCelda(buque.x + i, buque.y).agregarBarco(barco)
             self.getCelda(buque.x + i, buque.y).ocupado = True
 
-        self.getCelda(buque.x, buque.y).agregarBarco(Barco())
+        barco = Barco()
+        barco.setNumBuque(len(self.buques))
+        buque.agregarBarco(barco)
+        self.getCelda(buque.x, buque.y).agregarBarco(barco)
+        self.buques.append(buque)
         return True
 
 
@@ -71,6 +92,8 @@ class Tablero:
         self.getCelda(x,y).barco.matarBarco()
         self.getCelda(x,y).color = " M "
         self.getCelda(x,y).oculto = False
+        if not self.getCelda(x,y).barco.numBuque is None:
+          self.buques[self.getCelda(x,y).barco.numBuque].eliminarBarco(self.getCelda(x,y).barco)
         return True
       else:
         self.getCelda(x,y).color = " N "

@@ -8,6 +8,7 @@ class Celda:
     self.oculto= True
     self.barco = None
 
+
   def agregarBarco(self, barco):
     self.barco = barco
     self.ocupado = True

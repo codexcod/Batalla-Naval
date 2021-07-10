@@ -11,14 +11,23 @@ class Robot:
         self.posibilidades=[]
         self.microPosibilidades=[]
         self.aseguradas = []
+        self.posibilidadesSecundarias = []
+        self.posibildadSecundaria = None
 
     def disparar(self,tablero):
+        if len(self.posibilidadesSecundarias) > 0 and not self.barcoEnMira:
+            self.barcoEnMira = True
+            self.mira = self.posibilidadesSecundarias[len(self.posibilidadesSecundarias) - 1]
+            self.pensarPosibilidades(self.posibilidadesSecundarias[len(self.posibilidadesSecundarias) - 1],tablero)
+            self.posibilidadesSecundarias.clear()
+
         if self.barcoEnMira:
             if len(self.aseguradas) == 0:
                 if  len(self.microPosibilidades) == 0:
                     if len(self.posibilidades) == 4 or len(self.posibilidades) == 3:
-                        aleatorio =random.randrange(0,len(self.posibilidades))
+                        aleatorio = random.randrange(0,len(self.posibilidades))
                         if tablero.dispararPunto(self.posibilidades[aleatorio].x,self.posibilidades[aleatorio].y):
+                            self.posibildadSecundaria = self.posibilidades[aleatorio]
                             if self.mira.x ==  self.posibilidades[aleatorio].x:
                                 diferencia = self.posibilidades[aleatorio].y - self.mira.y
                                 self.posibilidades.clear()
@@ -102,49 +111,49 @@ class Robot:
                         self.limpiarMira()
                         return True
                     else:
-                        self.microPosibilidades.remove(self.microPosibilidades[aleatorio])
-                        self.aseguradas.append(self.microPosibilidades[0])
-                        self.microPosibilidades.clear()
+                        if len(self.microPosibilidades) > 1:
+                            self.microPosibilidades.remove(self.microPosibilidades[aleatorio])
+                            self.aseguradas.append(self.microPosibilidades[0])
+                            self.microPosibilidades.clear()
+                        else:
+                            self.pensarPosibilidades(self.mira,tablero)
+                            self.microPosibilidades.clear()
+                            self.posibilidadesSecundarias.append(self.posibildadSecundaria)
+
                         return False
 
             else:
-                tablero.dispararPunto(self.aseguradas[len(self.aseguradas) - 1].x,self.aseguradas[len(self.aseguradas) - 1 ].y)
+                disparo = tablero.dispararPunto(self.aseguradas[len(self.aseguradas) - 1].x,self.aseguradas[len(self.aseguradas) - 1 ].y)
                 if len(self.aseguradas) == 1:
-                    self.limpiarMira()
+                    if disparo:
+                        self.limpiarMira()
+                    else:
+                        self.pensarPosibilidades(self.mira, tablero)
+                        self.aseguradas.clear()
+                        self.posibilidadesSecundarias.append(self.posibildadSecundaria)
+
                 else:
                     self.aseguradas.remove(self.aseguradas[len(self.aseguradas) - 1])
+
 
 
                 return True
 
         else:
+                celda = self.buscarBarcos(tablero)
 
-            celda = self.buscarBarcos(tablero)
+                if tablero.dispararPunto(celda.x,celda.y):
+                    self.barcoEnMira = True
+                    self.mira = celda
 
-            if tablero.dispararPunto(celda.x,celda.y):
-                self.barcoEnMira = True
-                self.mira = celda
+                    self.pensarPosibilidades(celda,tablero)
 
-                if self.chequearCelda(celda.x,celda.y + 1,tablero):
-                    if self.chequearCelda(celda.x,celda.y - 1,tablero) or self.chequearCelda(celda.x,celda.y + 2,tablero):
-                        self.posibilidades.append(Celda(celda.x,celda.y+1))
+                    return True
 
-                if self.chequearCelda(celda.x+ 1,celda.y,tablero):
-                    if self.chequearCelda(celda.x - 1,celda.y,tablero) or self.chequearCelda(celda.x + 2,celda.y,tablero):
-                        self.posibilidades.append(Celda(celda.x+1,celda.y))
+                else:
+                    return False
 
-                if self.chequearCelda(celda.x, celda.y - 1,tablero):
-                    if self.chequearCelda(celda.x, celda.y + 1,tablero) or self.chequearCelda(celda.x, celda.y - 2,tablero):
-                        self.posibilidades.append(Celda(celda.x,celda.y-1))
 
-                if self.chequearCelda(celda.x- 1, celda.y,tablero):
-                    if self.chequearCelda(celda.x + 1, celda.y,tablero) or self.chequearCelda(celda.x - 2, celda.y,tablero):
-                        self.posibilidades.append(Celda(celda.x-1,celda.y))
-
-                return True
-
-            else:
-                return False
 
     def chequearCelda(self,x,y,tablero):
         if not tablero.getCelda(x,y) is None:
@@ -161,6 +170,25 @@ class Robot:
         self.posibilidades.clear()
         self.microPosibilidades.clear()
         self.aseguradas.clear()
+
+
+    def pensarPosibilidades(self,celda,tablero):
+        if self.chequearCelda(celda.x, celda.y + 1, tablero):
+            if self.chequearCelda(celda.x, celda.y - 1, tablero) or self.chequearCelda(celda.x, celda.y + 2, tablero):
+                self.posibilidades.append(Celda(celda.x, celda.y + 1))
+
+        if self.chequearCelda(celda.x + 1, celda.y, tablero):
+            if self.chequearCelda(celda.x - 1, celda.y, tablero) or self.chequearCelda(celda.x + 2, celda.y, tablero):
+                self.posibilidades.append(Celda(celda.x + 1, celda.y))
+
+        if self.chequearCelda(celda.x, celda.y - 1, tablero):
+            if self.chequearCelda(celda.x, celda.y + 1, tablero) or self.chequearCelda(celda.x, celda.y - 2, tablero):
+                self.posibilidades.append(Celda(celda.x, celda.y - 1))
+
+        if self.chequearCelda(celda.x - 1, celda.y, tablero):
+            if self.chequearCelda(celda.x + 1, celda.y, tablero) or self.chequearCelda(celda.x - 2, celda.y, tablero):
+                self.posibilidades.append(Celda(celda.x - 1, celda.y))
+
 
     def calcularPosibilidades(self,celda,tablero):
         posibilidades = 0
