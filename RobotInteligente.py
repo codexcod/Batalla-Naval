@@ -69,8 +69,6 @@ for i in range(1,numBarcos + 1):
             else:
                 y = int(inputY)
 
-    print(inputX)
-    print(y)
 
     orientacion = input("indique la orientacion(V/H)")
     while not tableroJugador.agregarBuque(Buque(x,y,orientacion == "v" or orientacion =="V",1)):
