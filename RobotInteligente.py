@@ -30,33 +30,62 @@ Selecciona la posicion de los buques
 """)
 
 for i in range(1,numBarcos + 1):
+    x = 0
+    y = 0
     print(f"Barco numero {i}")
-    x = int(input("x: "))
-    while x > casillas or x < 1:
-        print("Fuera de rango")
-        x = int(input("x: "))
+    inputX = ""
+    while not inputX.isnumeric():
+        inputX = input("x: ")
+        if inputX.isnumeric():
+            if int(inputX) > casillas or int(inputX) < 1:
+                inputX = ""
+                print("Fuera de rango")
 
-    y = int(input("y: "))
+            else:
+                x = int(inputX)
 
-    while y > casillas or y < 1:
-        print("Fuera de rango")
-        y = int(input("x: "))
+    inputY = ""
+    while not inputY.isnumeric():
+        inputY = input("y: ")
+        if inputY.isnumeric():
+            if int(inputY) > casillas or int(inputY) < 1:
+                print("Fuera de rango")
+                inputY = ""
+
+            else:
+                y = int(inputY)
+
+    print(inputX)
+    print(y)
 
     orientacion = input("indique la orientacion(V/H)")
     while not tableroJugador.agregarBuque(Buque(x,y,orientacion == "v" or orientacion =="V",1)):
         print(chr(27) + "[1;31m" + "¡Ya hay un barco ocupando esos espacios!")
         print(chr(27) + "[37m" + "")
         print(f"Barco numero {i}")
-        x = int(input("x: "))
-        while x > casillas or x < 1:
-            print("Fuera de rango")
-            x = int(input("x: "))
+        inputX = ""
+        while not inputX.isnumeric():
+            inputX = input("x: ")
+            if inputX.isnumeric():
+                if int(inputX) > casillas or int(inputX) < 1:
+                    inputX = ""
+                    print("Fuera de rango")
+                    continue
 
-        y = int(input("y: "))
+                else:
+                    x = int(inputX)
 
-        while y > casillas or y < 1:
-            print("Fuera de rango")
-            y = int(input("x: "))
+        inputY = ""
+        while not inputY.isnumeric():
+            inputY = input("y: ")
+            if inputY.isnumeric():
+                if int(inputY) > casillas or int(inputY) < 1:
+                    print("Fuera de rango")
+                    inputY = ""
+                    continue
+
+                else:
+                    y = int(inputY)
 
         orientacion = input("indique la orientacion(V/H)")
 
@@ -77,30 +106,61 @@ puntosJugador = 0
 puntosRobot = 0
 
 while puntosRobot != numBarcos * 3 and puntosJugador != numBarcos * 3:
+    x = 0
+    y = 0
     print("¿Donde vas a disparar?")
-    x = int(input("x: "))
-    while x > casillas or x < 1:
-        print("Fuera de rango")
-        x = int(input("x: "))
+    inputX = ""
+    while not inputX.isnumeric():
+        inputX = input("x: ")
+        if inputX.isnumeric():
+            if int(inputX) > casillas or int(inputX) < 1:
+                inputX = ""
+                print("Fuera de rango")
+                continue
 
-    y = int(input("y: "))
-    while y > casillas or y < 1:
-        print("Fuera de rango")
-        y = int(input("x: "))
+            else:
+                x = int(inputX)
+
+    inputY = ""
+    while not inputY.isnumeric():
+        inputY = input("y: ")
+        if inputY.isnumeric():
+            if int(inputY) > casillas or int(inputY) < 1:
+                print("Fuera de rango")
+                inputY = ""
+                continue
+
+            else:
+                y = int(inputY)
+
 
     while not tableroRobot.getCelda(x,y).oculto:
         print(chr(27) + "[1;31m" + "¡Ya disparaste a ese punto!")
         print(chr(27) + "[37m" + "")
         print("¿Donde vas a disparar?")
-        x = int(input("x: "))
-        while x > casillas or x < 1:
-            print("Fuera de rango")
-            x = int(input("x: "))
 
-        y = int(input("y: "))
-        while y > casillas or y < 1:
-            print("Fuera de rango")
-            y = int(input("x: "))
+        inputX = ""
+        while not inputX.isnumeric():
+            inputX = input("x: ")
+            if inputX.isnumeric():
+                if int(inputX) > casillas or int(inputX) < 1:
+                    inputX = ""
+                    print("Fuera de rango")
+                    continue
+                else:
+                    x = int(inputX)
+
+        inputY = ""
+        while not inputY.isnumeric():
+            inputY = input("y: ")
+            if inputY.isnumeric():
+                if int(inputY) > casillas or int(inputY) < 1:
+                    print("Fuera de rango")
+                    inputY = ""
+                    continue
+
+                else:
+                    y = int(inputY)
 
     if robot.disparar(tableroJugador):
         print(tableroJugador.mostrarTablero())
@@ -122,6 +182,26 @@ Le diste a un barco!
     else:
         print(tableroRobot.dibujarTablero())
 
+    puntacion = "Jugador           Maquina"
+    for i in range(0,len(tableroJugador.buques)):
+        puntacion += "\n"
+        puntacion += f"Barco {i}: "
+        if tableroJugador.buques[i].estaVivo():
+            puntacion += chr(27) + "[1;32m" + "Vivo   "
+            puntacion += chr(27) + "[37m" + ""
+        else:
+            puntacion += chr(27) + "[1;31m" + "Muerto "
+            puntacion += chr(27) + "[37m" + ""
+
+        puntacion += f"Barco {i}: "
+        if tableroRobot.buques[i].estaVivo():
+            puntacion += chr(27) + "[1;32m" + "Vivo   "
+            puntacion += chr(27) + "[37m" + ""
+        else:
+            puntacion += chr(27) + "[1;31m" + "Muerto "
+            puntacion += chr(27) + "[37m" + ""
+
+    print(f"{puntacion}")
     print(f"{puntosRobot}  {puntosJugador}")
 
 

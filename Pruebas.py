@@ -8,6 +8,7 @@ import random
 tablero = Tablero(int(input("Ingrese el numero de casillas: ")))
 
 tablero.agregarBuque(Buque(3,4,True,1))
+tablero.agregarBuque(Buque(7,4,True,1))
 tablero.agregarBuque(Buque(5,4,False,1))
 
 
@@ -26,7 +27,9 @@ while 4 == 4:
     robot.disparar(tablero)
     print(tablero.buques[tablero.getCelda(3, 4).barco.numBuque].estaVivo())
     print(tablero.buques[tablero.getCelda(5, 4).barco.numBuque].estaVivo())
+    print(tablero.buques[tablero.getCelda(7, 4).barco.numBuque].estaVivo())
     print(tablero.mostrarTablero())
+    print(tablero.dibujarTablero())
 
 
 
