@@ -16,10 +16,24 @@ while numBarcos > casillas * casillas - (casillas) or numBarcos < 1:
     print("Ingrese una cantidad de buques correcta")
     numBarcos = int(input(f"Con cuantos buques quiere jugar?({casillas * casillas - (casillas)}.max) "))
 
+inputDificultad = ""
+while not inputDificultad.isnumeric():
+
+    inputDificultad = input("Dificultad del robot:  ")
+    if inputDificultad.isnumeric():
+        if int(inputDificultad) < 0:
+            print("Escriba un numero mayor a 0")
+            inputDificultad = ""
+
+        else:
+            dificultad = int(inputDificultad)
+
+
+
 
 tableroJugador = Tablero(casillas)
 tableroRobot = Tablero(casillas)
-robot = Robot(casillas)
+robot = Robot(casillas,dificultad)
 
 print(f"""
 
@@ -164,9 +178,7 @@ while puntosRobot != numBarcos * 3 and puntosJugador != numBarcos * 3:
 
     if robot.disparar(tableroJugador):
         print(tableroJugador.mostrarTablero())
-        print(chr(27)+"[1;31m"+"""
-Encontraron uno de tus  barcos!
-""")
+        print(chr(27)+"[1;31m"+"""Encontraron uno de tus  barcos!""")
         print(chr(27)+"[37m" + "")
         puntosRobot += 1
     else:
@@ -174,9 +186,7 @@ Encontraron uno de tus  barcos!
 
     if tableroRobot.dispararPunto(x,y):
         print(tableroRobot.dibujarTablero())
-        print(chr(27) + "[1;32m" + """
-Le diste a un barco!
-        """)
+        print(chr(27) + "[1;32m" + """Le diste a un barco!""")
         print(chr(27) + "[37m" + "")
         puntosJugador += 1
     else:
@@ -185,7 +195,7 @@ Le diste a un barco!
     puntacion = "Jugador           Maquina"
     for i in range(0,len(tableroJugador.buques)):
         puntacion += "\n"
-        puntacion += f"Barco {i}: "
+        puntacion += f"Barco {i + 1}: "
         if tableroJugador.buques[i].estaVivo():
             puntacion += chr(27) + "[1;32m" + "Vivo   "
             puntacion += chr(27) + "[37m" + ""
@@ -193,7 +203,7 @@ Le diste a un barco!
             puntacion += chr(27) + "[1;31m" + "Muerto "
             puntacion += chr(27) + "[37m" + ""
 
-        puntacion += f"Barco {i}: "
+        puntacion += f"Barco {i + 1}: "
         if tableroRobot.buques[i].estaVivo():
             puntacion += chr(27) + "[1;32m" + "Vivo   "
             puntacion += chr(27) + "[37m" + ""
@@ -202,7 +212,7 @@ Le diste a un barco!
             puntacion += chr(27) + "[37m" + ""
 
     print(f"{puntacion}")
-    print(f"{puntosRobot}  {puntosJugador}")
+
 
 
 

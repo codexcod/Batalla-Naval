@@ -4,7 +4,8 @@ import random
 
 class Robot:
 
-    def __init__(self,casillas):
+    def __init__(self,casillas,dificultad):
+        self.dificultad = dificultad
         self.casillas = casillas
         self.barcoEnMira = False
         self.mira = None
@@ -23,11 +24,6 @@ class Robot:
 
 
         if self.barcoEnMira:
-            print(f"""
-aseguradas : {len(self.aseguradas)}
-posibilidades : {len(self.posibilidades)}
-micro: {len(self.microPosibilidades)}
-secon : {len(self.posibilidadesSecundarias)}""")
             if len(self.aseguradas) == 0:
                 if  len(self.microPosibilidades) == 0:
                     if len(self.posibilidades) == 4 or len(self.posibilidades) == 3:
@@ -306,7 +302,7 @@ secon : {len(self.posibilidadesSecundarias)}""")
         posiblesCeldas = []
         max = 0
         mejorPosibilidad = 0
-        for i in range(0,5):
+        for i in range(0,self.dificultad):
             x = random.randrange(1, self.casillas + 1)
             y = random.randrange(1, self.casillas + 1)
             celda = tablero.getCelda(x, y)

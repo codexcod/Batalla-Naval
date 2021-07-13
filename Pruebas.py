@@ -17,7 +17,7 @@ tablero.agregarBuque(Buque(5,4,False,1))
 
 
 
-robot = Robot(tablero.casillas)
+robot = Robot(tablero.casillas,5)
 print(tablero.mostrarTablero())
 
 
