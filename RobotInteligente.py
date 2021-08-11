@@ -4,7 +4,7 @@ from Barco import Barco
 from Buque import Buque
 from Inteligencia import Robot
 import random
-
+from Helper import Helper
 
 casillas = int(input("Con cuantas casillas quiere jugar?(9.max): "))
 while casillas > 9 or casillas < 1:
@@ -117,7 +117,10 @@ Comienza el juego!
 puntosJugador = 0
 puntosRobot = 0
 
+Helper.clear()  
+
 while puntosRobot != numBarcos * 3 and puntosJugador != numBarcos * 3:
+    
     x = 0
     y = 0
     print("¿Donde vas a disparar?")
@@ -174,6 +177,9 @@ while puntosRobot != numBarcos * 3 and puntosJugador != numBarcos * 3:
                 else:
                     y = int(inputY)
 
+
+    Helper.clear()                
+
     if robot.disparar(tableroJugador):
         print(tableroJugador.mostrarTablero())
         print(chr(27)+"[1;31m"+"""Encontraron uno de tus  barcos!""")
@@ -210,6 +216,7 @@ while puntosRobot != numBarcos * 3 and puntosJugador != numBarcos * 3:
             puntacion += chr(27) + "[37m" + ""
 
     print(f"{puntacion}")
+    
 
 
 

@@ -13,3 +13,6 @@ class Celda:
     self.barco = barco
     self.ocupado = True
     self.color = " B "
+
+
+    
